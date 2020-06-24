@@ -1,0 +1,30 @@
+extends ../layout/layout.pug
+
+block content
+
+    a.mb-2.pb-10.btn.btn-primary(href='/reports/export') Export
+    -var total = 0;
+    table.table
+        th Name
+        th ID
+        th Price
+        th Amount
+        th Vendor
+        th Date
+            tr
+            each data in reportData
+                tr 
+                    td= data.name
+                    td= data.idFood
+                    td= data.price
+                    td= data.amount
+                    td= data.vendor
+                    td= data.date
+                -total += (parseInt(data.price) * parseInt(data.amount))   
+            tr
+                th Total revenue
+                td
+                td
+                td=total
+                td
+                td   
