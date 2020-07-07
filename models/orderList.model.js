@@ -13,11 +13,11 @@ var orderList = new mongoose.Schema({
         type: String,
         require: true
     },
-    time :{
-        type : String,
-        require : true
+    time: {
+        type: String,
+        require: true
     }
 });
 var orderList = mongoose.model('orderList', orderList, 'orderList');
 
-module.exports = orderList;
+module.exports = orderList; 

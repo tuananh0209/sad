@@ -9,4 +9,4 @@ router.get('/:id', controller.viewOrders);
 
 // router.get('/:id', controller.view);
 
-module.exports = router
+module.exports = router 

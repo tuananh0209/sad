@@ -9,23 +9,23 @@ module.exports.orderList = async function (req, res) {
     var orderList = [];
     await orderListModel.find({
         // __v : 0
-    },async function (err, data) {
+    }, async function (err, data) {
         if (err) console.log(err);
         try {
-        await getOrderList(data);
-        //    console.log(data);
+            await getOrderList(data);
+            //    console.log(data);
         } catch (err) {
             console.log(err);
             return;
         }
     });
-   
 
-    function getOrderList(data){
-        var getData = data.map( async function(value){
+
+    function getOrderList(data) {
+        var getData = data.map(async function (value) {
             await userManage.find({
-                _id : value.userId
-            }, function(err , userData){
+                _id: value.userId
+            }, function (err, userData) {
                 if (err) console.log(err);
                 try {
                     var getOrder = new orderListObject.orderList(
@@ -36,22 +36,21 @@ module.exports.orderList = async function (req, res) {
                     orderList.push(getOrder);
                     console.log(getOrder);
 
-                }
-                catch(err) {
+                } catch (err) {
                     res.redirect('orderList');
                 }
             })
         })
 
     }
-   setTimeout(function(){
-       console.log(orderList);
+    setTimeout(function () {
+        console.log(orderList);
 
-       res.render('orderList/orderList', {
-           orderList: orderList
-       });
+        res.render('orderList/orderList', {
+            orderList: orderList
+        });
 
-   }, 500);
+    }, 500);
 
 }
 
@@ -69,7 +68,7 @@ module.exports.orderList = async function (req, res) {
 
 // };
 
-module.exports.viewOrders = async function (req, res){
+module.exports.viewOrders = async function (req, res) {
     // var id = req.params.id;
     // var lists = dbOrderList.get('orderLists').find({
     //     userId: id
@@ -91,71 +90,73 @@ module.exports.viewOrders = async function (req, res){
     var id = req.params.id;
     console.log(id);
     await orderListModel.find({
-        userId : id
-    }, function(err , data){
+        userId: id
+    }, function (err, data) {
         if (err) console.log(err);
-        try{
+        try {
             var cart = new foodObject.getFood(Object.keys(data[0].cart));
             console.log(cart);
-            getFoodData(cart.data , data[0]);
-        }
-        catch(err){
+            getFoodData(cart.data, data[0]);
+        } catch (err) {
             // res.redirect('orderList');
             console.log(err);
             return;
         }
     })
 
-    function getFoodData(cart , data){
+    function getFoodData(cart, data) {
         var foodInCart = [];
-        var a =  cart.map(function(value){
+        var a = cart.map(function (value) {
             foodModel.find({
-                _id : value
-            }, function(err , data){
+                _id: value
+            }, function (err, data) {
                 if (err) console.log(err);
-                try{
+                try {
                     console.log(data[0]);
                     foodInCart.push(data[0]);
                     return data[0];
-                }
-                catch(err){
+                } catch (err) {
                     console.log(err);
                     return false;
                 }
             })
         })
 
-        setTimeout(function(){
-             console.log(foodInCart);
-             res.render('orderList/viewOrders', {
-                 lists: data,
-                 foodList: foodInCart
-             });
+        setTimeout(function () {
+            console.log(foodInCart);
+            res.render('orderList/viewOrders', {
+                lists: data,
+                foodList: foodInCart
+            });
         }, 500);
-       
+
     }
 
-    
+
 }
 
-module.exports.cart = function (req, res , next) {
+module.exports.cart = function (req, res, next) {
     var productId = req.params.productId;
     var sessionId = req.signedCookies.sessionId;
 
-    if (!sessionId){
+    if (!sessionId) {
         res.redirect('/products/products');
         return;
     }
     var count = db
-    .get('session')
-    .find({ id : sessionId})
-    .get('cart.' + productId , 0)
-    .value();
+        .get('session')
+        .find({
+            id: sessionId
+        })
+        .get('cart.' + productId, 0)
+        .value();
 
     db.get('session')
-    .find({ id : sessionId })
-    .set('cart.' + productId , parseInt(count) + 1)
-    .write();
+        .find({
+            id: sessionId
+        })
+        .set('cart.' + productId, parseInt(count) + 1)
+        .write();
 
     res.redirect('/products/products')
 }
