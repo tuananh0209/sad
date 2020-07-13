@@ -174,7 +174,7 @@ html(lang='zxx')
                                                     -total += parseInt(data.price) * parseInt(cartData.cart[data._id]);
                                             td.shoping__cart__total(id ="total" + data.id )= '$' + parseInt(data.price) * parseInt(cartData.cart[data._id]) 
                                             td.shoping__cart__item__close
-                                                span.icon_close(id = "delete"+ data.id , onclick = "deleteItem(event)")
+                                                span.icon_close(id = "delete"+ data.id  , onclick = "deleteItem(event)")
        
                 .row
                     .col-lg-12
@@ -377,10 +377,17 @@ html(lang='zxx')
                     }
                 })
                 document.getElementById("deleteItem" + id.slice(6)).style.display = "none";
+                var price = document.getElementById("price");
+                var decPrice = document.getElementById("total" + id.slice(6));
                
-                  var cart = document.getElementById("cart");
-                  var temp  = parseInt(cart.textContent) - 1;
-                  cart.innerHTML = temp;
+                var cart = document.getElementById("cart");
+
+                var temp  = parseInt(cart.textContent) - 1;
+                cart.innerHTML = temp;
+                temp = parseInt(price.textContent.slice(1)) - parseInt(decPrice.textContent.slice(1));
+
+                price.innerHTML = "$" + temp;
+
             }
 
 
